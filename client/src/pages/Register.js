@@ -3,12 +3,12 @@ import { useMutation } from '@apollo/client';
 import { REGISTER } from '../mutations/users';
 import { AuthContext } from '../context/authContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { Button, Skeleton, TextField, Typography } from '@mui/material';
+import { Alert, Button, Skeleton, TextField, Typography } from '@mui/material';
 
 export default function Register() {
   const userData = { name: '', email: '', password: '', age: 0 };
   const [user, serUserData] = useState({ ...userData });
-  const [createUser, { data, loading, error }] = useMutation(REGISTER);
+  const [createUser, { data, loading, error }] = useMutation(REGISTER, { errorPolicy: 'all' });
   const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -95,6 +95,9 @@ export default function Register() {
             <Button type="submit" sx={{ mt: 2, mb: 3 }} variant="contained">
               Register
             </Button>
+            {error && error.graphQLErrors.map(({ message }, i) => 
+              <Alert severity="error" key={i}>{message}</Alert>
+            )}
           </form>
           <Button variant="text">
             <Link to="/login">Login</Link>

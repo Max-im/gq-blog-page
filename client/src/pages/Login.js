@@ -3,12 +3,12 @@ import { useMutation } from '@apollo/client';
 import { LOGIN } from '../mutations/users';
 import { AuthContext } from '../context/authContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Skeleton, TextField, Typography } from '@mui/material';
+import { Alert, Button, Skeleton, TextField, Typography } from '@mui/material';
 
 export default function Login() {
   const userData = { email: '', password: '' };
   const [user, serUserData] = useState({ ...userData });
-  const [login, { data, loading, error }] = useMutation(LOGIN);
+  const [login, { data, loading, error }] = useMutation(LOGIN, { errorPolicy: 'all' });
   const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -31,45 +31,58 @@ export default function Login() {
     }
   }, [data]);
 
+  if (error) {
+  }
+
   return (
     <div>
-      {loading && <Skeleton variant="rectangular" width={210} height={118} />}
       <Typography variant="h2" component="h2">
         Login
       </Typography>
-      <form onSubmit={onLogin}>
-        <div>
-          <TextField
-            sx={{ mb: 2 }}
-            id="email"
-            value={user.email}
-            onChange={inputChange}
-            label="Email"
-            size="small"
-            variant="outlined"
-            name="email"
-          />
-        </div>
-        <div>
-          <TextField
-            sx={{ mb: 2 }}
-            id="password"
-            value={user.password}
-            onChange={inputChange}
-            label="Password"
-            type="password"
-            size="small"
-            variant="outlined"
-            name="password"
-          />
-        </div>
-        <Button type="submit" sx={{ mt: 2, mb: 3 }} variant="contained">
-          Login
-        </Button>
-      </form>
-      <Button variant="text">
-        <Link to="/register">Register</Link>
-      </Button>
+      {loading && <Skeleton variant="rectangular" width={210} height={118} />}
+      {!loading && (
+        <>
+          <form onSubmit={onLogin}>
+            <div>
+              <TextField
+                sx={{ mb: 2 }}
+                id="email"
+                value={user.email}
+                onChange={inputChange}
+                label="Email"
+                size="small"
+                variant="outlined"
+                name="email"
+              />
+            </div>
+            <div>
+              <TextField
+                sx={{ mb: 2 }}
+                id="password"
+                value={user.password}
+                onChange={inputChange}
+                label="Password"
+                type="password"
+                size="small"
+                variant="outlined"
+                name="password"
+              />
+            </div>
+            <Button type="submit" sx={{ mt: 2, mb: 3 }} variant="contained">
+              Login
+            </Button>
+            {error &&
+              error.graphQLErrors.map(({ message }, i) => (
+                <Alert severity="error" key={i}>
+                  {message}
+                </Alert>
+              ))}
+          </form>
+          <Button variant="text">
+            <Link to="/register">Register</Link>
+          </Button>
+        </>
+      )}
     </div>
   );
 }

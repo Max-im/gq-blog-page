@@ -40,14 +40,15 @@ export default function Posts() {
           </Modal>
 
           <Box sx={{ mt: 3, display: 'flex' }}>
-            {loading && [1,2,3].map(() => <Box sx={{ mr: 2 }}>
-              <Skeleton />
-              <Skeleton variant="rectangular" width={150} height={110} />
-            </Box>)}
+            {loading &&
+              [1, 2, 3].map((i) => (
+                <Box sx={{ mr: 2 }} key={i}>
+                  <Skeleton />
+                  <Skeleton variant="rectangular" width={150} height={110} />
+                </Box>
+              ))}
 
-            {!loading && posts.map((post) => (
-              <Post key={post.id} post={post} />
-            ))}
+            {!loading && posts.map((post) => <Post key={post.id} post={post} />)}
           </Box>
         </>
       )}

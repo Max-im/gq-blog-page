@@ -1,25 +1,26 @@
 import {getUserId} from '../utils/auth';
+import CustomError from '../errors/CustomError'
 
 module.exports = {
   createUser: async (parent, {input}, { models }) => {
     try {
       return await models.user.signup(input);
-    } catch (err) { console.log(err.message)}
+    } catch(err) { throw new CustomError(err.message)}
   },
   login: async (parent, {input}, { models }) => {
     try {
       return await models.user.login(input);
-    } catch(err) {console.log(err.message)}
+    } catch(err) { throw new CustomError(err.message)}
   },
   updateUser: async (parent, { input }, { models, request }) => {
     try {
       return await models.user.update(input, request);
-    } catch (err) {console.log(err.message)}
+    } catch(err) { throw new CustomError(err.message)}
   },
   deleteUser: async (parent, args, { models, request }) => {
     try {
       return await models.user.update(request);
-    } catch (err) {console.log(err.message)}
+    } catch(err) { throw new CustomError(err.message)}
   },
   createPost: async (parent, { input }, { models, pubsub, request }) => {
     try {
@@ -28,7 +29,7 @@ module.exports = {
       pubsub.publish('post', {post: { mutation: 'CREATED', data: post }});
 
       return post;
-    } catch (err) {console.log(err.message)}
+    } catch(err) { throw new CustomError(err.message)}
   },
   updatePost: async (parent, { id, input }, { models, request, pubsub }) => {
     try {
@@ -39,7 +40,7 @@ module.exports = {
       pubsub.publish(`myPost:${userId}`, {myPost: { mutation: 'UPDATED', data: post }});
       
       return post;
-    } catch (err) {console.log(err.message)}
+    } catch(err) { throw new CustomError(err.message)}
   },
   deletePost: async (parent, { id }, { models, pubsub, request }) => {
     try {
@@ -59,12 +60,12 @@ module.exports = {
       pubsub.publish(`comment:${input.post}`, { mutation: 'CREATED', data: comment });
 
       return comment;
-    } catch (err) {console.log(err.message)}
+    } catch(err) { throw new CustomError(err.message)}
   },
   updateComment: async (parent, { id, input }, { request, models }) => {
     try {
       return await models.comment.update(input, request, id);
-    } catch (err) {console.log(err.message)}
+    } catch(err) { throw new CustomError(err.message)}
   },
   deleteComment: async (parent, { id }, { pubsub, request }) => {
     try {
@@ -73,6 +74,6 @@ module.exports = {
       pubsub.publish('comment', { comment: { mutation: 'DELETED', data: comment } });
       
       return comment;
-    } catch (err) {console.log(err.message)}
+    } catch(err) { throw new CustomError(err.message)}
   },
 };
