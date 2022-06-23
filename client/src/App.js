@@ -1,8 +1,7 @@
+import { Container } from '@mui/system';
 import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import AuthMenu from './components/AuthMenu';
 import Header from './components/Header';
-import Navigation from './components/Navigation';
 import { AuthContext } from './context/authContext';
 
 function App() {
@@ -22,7 +21,9 @@ function App() {
     <AuthContext.Provider value={{ user, setUser }}>
       <div className="app">
         <Header />
-        <Outlet />
+        <Container maxWidth="lg">
+          <Outlet />
+        </Container>
       </div>
     </AuthContext.Provider>
   );

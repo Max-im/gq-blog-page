@@ -5,6 +5,8 @@ import Modal from '../components/UI/Modal/Modal';
 import Post from '../components/Post';
 import PostsCreate from '../components/PostsCreate';
 import { AuthContext } from '../context/authContext';
+import Typography from '@mui/material/Typography';
+import { Box, Button } from '@mui/material';
 
 export default function Posts() {
   const [posts, setPosts] = useState([]);
@@ -24,15 +26,22 @@ export default function Posts() {
       {error && error.message}
       {!(loading || error) && (
         <>
-          <h1>Posts</h1>
-          {user && <button onClick={() => setVisible(true)}>Create Post</button>}
+          <Typography variant="h2" color="inherit" component="h2">
+            Posts
+          </Typography>
+
+          {user && (
+            <Button onClick={() => setVisible(true)} variant="contained">
+              Create Post
+            </Button>
+          )}
           {!user && <p>Login to create a post</p>}
           <Modal visible={shownModal} setVisible={setVisible}>
-              <PostsCreate setVisible={setVisible} />
+            <PostsCreate setVisible={setVisible} />
           </Modal>
-          <ul>
+          <Box sx={{mt:3, display: 'flex'}}>
             {posts.map((post) => <Post key={post.id} post={post} />)}
-          </ul>
+          </Box>
         </>
       )}
     </div>
