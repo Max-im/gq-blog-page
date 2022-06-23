@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER } from '../mutations/users';
 import { GET_USERS } from '../query/users';
+import { Button, TextField, Typography } from '@mui/material';
 
 export default function UsersUpdate({setVisible, name='', age=''}) {
   const userTmpl = { name, age };
@@ -31,18 +32,32 @@ export default function UsersUpdate({setVisible, name='', age=''}) {
 
   return (
     <div>
-      <h3>Update User</h3>
+      <Typography variant="h4" component="h4">
+        Update Your Info
+      </Typography>
       <form onSubmit={onUpdate}>
         <div style={{marginTop: '10px'}}>
-          <p>Name</p>
-          <input type="text" name="name" value={userInput.name} onChange={inputChange} />
+          <TextField 
+            id="name" 
+            size="small" 
+            label="Name" 
+            variant="outlined"  
+            name="name" 
+            value={userInput.name} 
+            onChange={inputChange} />
         </div>
         <div style={{marginTop: '10px'}}>
-          <p>Age</p>
-          <input type="text" name="age" value={userInput.age} onChange={inputChange} />
+        <TextField 
+            id="age" 
+            size="small" 
+            label="Age" 
+            variant="outlined"  
+            name="age" 
+            type="number"
+            value={userInput.age} 
+            onChange={inputChange} />
         </div>
-
-        <button type="submit" style={{marginTop: '10px'}}>Update</button>
+        <Button type="submit" sx={{mt: 2}} variant="contained">Update</Button>
       </form>
     </div>
   );
