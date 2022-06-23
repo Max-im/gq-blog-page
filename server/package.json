@@ -1,0 +1,53 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "heroku-postbuild": "babel src --out-dir dist --copy-files",
+    "db:sync": "dotenv -e .env.development -- npx prisma generate --schema=./prisma/development/schema.prisma",
+    "db:format": "prisma format",
+    "postinstall": "prisma generate --schema=./prisma/development/schema.prisma",
+    "db:push": "prisma db push",
+    "test:db:studio": "env-cmd --verbose -e test npx prisma studio --schema ./prisma/development/schema.prisma",
+    "dev:clear": "rm -rf ./node_modules/.cache/babel-loader",
+    "dev:start": "nodemon --ext js,graphql --exec babel-node src/app.js",
+    "dev": "cross-env NODE_ENV=development npm run dev:start",
+    "test": "env-cmd --verbose -e test jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@graphql-yoga/node": "^2.7.0",
+    "@prisma/client": "^3.14.0",
+    "babel-plugin-import-graphql": "^2.8.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "dotenv-cli": "^5.1.0",
+    "dotenv-expand": "^8.0.3",
+    "env-cmd": "^10.1.0",
+    "event-target-polyfill": "0.0.3",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.2",
+    "@babel/node": "^7.17.10",
+    "@babel/plugin-transform-spread": "^7.17.12",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/register": "^7.17.7",
+    "apollo-boost": "^0.4.9",
+    "cross-fetch": "^3.1.5",
+    "graphql": "^16.5.0",
+    "jest": "^28.1.0",
+    "jest-mock-extended": "^2.0.4",
+    "nodemon": "^2.0.16",
+    "prisma": "^3.14.0",
+    "supertest": "^6.2.3"
+  }
+}

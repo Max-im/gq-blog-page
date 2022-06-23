@@ -1,0 +1,115 @@
+input CreateUserInput {
+    name: String!
+    email: String!
+    password: String!
+    age: Int
+}
+
+input LoginUserInput {
+    email: String!
+    password: String!
+}
+
+input UpdateUserInput {
+    name: String
+    email: String
+    age: Int
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    age: Int
+    posts: [Post!]!
+    comments: [Comment!]!
+}
+
+input CreatePostInput {
+    title: String!
+    body: String!
+    published: Boolean!
+}
+
+input UpdatePostInput {
+    title: String
+    body: String
+    published: Boolean
+}
+
+type Post {
+    id: ID!
+    title: String!
+    body: String!
+    published: Boolean!
+    author: User!
+    comments: [Comment!]!
+}
+
+input CreateCommentInput {
+    text: String!
+    post: ID!
+}
+
+input UpdateCommentInput {
+    text: String
+    author: ID
+    post: ID
+}
+
+type Comment {
+    id: ID!
+    text: String!
+    author: User!
+    post: Post!
+}
+
+type AuthPayload {
+    token: String!
+    user: User!
+}
+
+type Mutation {
+    createUser(input: CreateUserInput!): AuthPayload!
+    login(input: LoginUserInput!): AuthPayload!
+    updateUser(input: UpdateUserInput! ): User!
+    deleteUser: User!
+    createPost(input: CreatePostInput!): Post!
+    updatePost(id: ID! input: UpdatePostInput!): Post!
+    deletePost(id: ID!): Post!
+    createComment(input: CreateCommentInput!): Comment!
+    updateComment(id: ID!, input: UpdateCommentInput!): Comment!
+    deleteComment(id: ID!): Comment!
+}
+
+enum MutationType {
+    CREATED
+    UPDATED
+    DELETED
+}
+
+type PostSubscriptionPayload {
+    mutation: MutationType!
+    data: Post!
+}
+
+type CommentSubscriptionPayload {
+    mutation: MutationType!
+    data: Comment!
+}
+
+type Subscription {
+    count: Int!
+    comment(postId: ID!): CommentSubscriptionPayload!
+    post: PostSubscriptionPayload!
+    myPost: PostSubscriptionPayload!
+}
+
+type Query {
+    users(query: String, take: Int, skip: Int): [User!]!
+    posts(query: String, take: Int, skip: Int): [Post!]!
+    comments(postId: ID!, take: Int, skip: Int): [Comment!]!
+    me: User!
+    post(postId: ID!): Post!
+    user(id: ID!): User!
+}
