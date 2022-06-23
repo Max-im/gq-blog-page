@@ -52,7 +52,7 @@ export default function PostsCreate({setVisible}) {
       </Typography>
       <form onSubmit={onCreatePost}>
         <div style={{marginTop: '10px'}}>
-          <TextField id="outlined-basic" label="Title" variant="outlined"  name="title" value={newPostInput.title} onChange={inputChange} />
+          <TextField id="outlined-basic" size="small" label="Title" variant="outlined"  name="title" value={newPostInput.title} onChange={inputChange} />
         </div>
         <div style={{marginTop: '20px', width: '500px'}}>
           <TextField

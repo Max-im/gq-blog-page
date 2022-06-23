@@ -6,7 +6,7 @@ import Post from '../components/Post';
 import PostsCreate from '../components/PostsCreate';
 import { AuthContext } from '../context/authContext';
 import Typography from '@mui/material/Typography';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Skeleton } from '@mui/material';
 
 export default function Posts() {
   const [posts, setPosts] = useState([]);
@@ -22,9 +22,8 @@ export default function Posts() {
 
   return (
     <div>
-      {loading && 'Loading...'}
       {error && error.message}
-      {!(loading || error) && (
+      {!error && (
         <>
           <Typography variant="h2" color="inherit" component="h2">
             Posts
@@ -39,8 +38,16 @@ export default function Posts() {
           <Modal visible={shownModal} setVisible={setVisible}>
             <PostsCreate setVisible={setVisible} />
           </Modal>
-          <Box sx={{mt:3, display: 'flex'}}>
-            {posts.map((post) => <Post key={post.id} post={post} />)}
+
+          <Box sx={{ mt: 3, display: 'flex' }}>
+            {loading && [1,2,3].map(() => <Box sx={{ mr: 2 }}>
+              <Skeleton />
+              <Skeleton variant="rectangular" width={150} height={110} />
+            </Box>)}
+
+            {!loading && posts.map((post) => (
+              <Post key={post.id} post={post} />
+            ))}
           </Box>
         </>
       )}

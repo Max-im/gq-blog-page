@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { LOGIN } from '../mutations/users';
 import { AuthContext } from '../context/authContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { Skeleton } from '@mui/material';
 
 export default function Login() {
   const userData = { email: '', password: '' };
@@ -32,8 +33,8 @@ export default function Login() {
     
   return (
     <div>
-        {loading && 'Loading...'}
-      <h1>Regisger</h1>
+        {loading && <Skeleton variant="rectangular" width={210} height={118} />}
+      <h1>Login</h1>
       <form onSubmit={onLogin}>
         <div>
           <label>Email</label>
