@@ -39,61 +39,66 @@ export default function Register() {
       {!loading && (
         <>
           <Typography variant="h2" component="h2">
-              Regisger
+            Regisger
           </Typography>
           <form onSubmit={register}>
             <div>
-              <TextField 
-              sx={{mb:2}}
-                id="name" 
-                value={user.name} 
-                onChange={inputChange} 
-                label="Name" 
+              <TextField
+                sx={{ mb: 2 }}
+                id="name"
+                value={user.name}
+                onChange={inputChange}
+                label="Name"
                 size="small"
-                variant="outlined" 
-                name="name" />
+                variant="outlined"
+                name="name"
+              />
             </div>
             <div>
-              <TextField 
-                sx={{mb:2}}
-                id="email" 
-                value={user.email} 
-                onChange={inputChange} 
-                label="Email" 
+              <TextField
+                sx={{ mb: 2 }}
+                id="email"
+                value={user.email}
+                onChange={inputChange}
+                label="Email"
                 size="small"
-                variant="outlined" 
-                name="email" />
+                variant="outlined"
+                name="email"
+              />
             </div>
             <div>
-            <TextField 
-                sx={{mb:2}}
-                id="password" 
-                value={user.password} 
-                onChange={inputChange} 
-                label="Password" 
+              <TextField
+                sx={{ mb: 2 }}
+                id="password"
+                value={user.password}
+                onChange={inputChange}
+                label="Password"
                 size="small"
                 type="password"
-                variant="outlined" 
-                name="password" />
+                variant="outlined"
+                name="password"
+              />
             </div>
             <div>
-            <TextField 
-                sx={{mb:2}}
-                id="age" 
-                value={user.age} 
-                onChange={inputChange} 
-                label="Age" 
+              <TextField
+                sx={{ mb: 2 }}
+                id="age"
+                value={user.age}
+                onChange={inputChange}
+                label="Age"
                 size="small"
                 type="number"
-                variant="outlined" 
-                name="age" />
+                variant="outlined"
+                name="age"
+              />
             </div>
-            <Button type="submit" sx={{mt: 2, mb: 3}} variant="contained">Register</Button>
+            <Button type="submit" sx={{ mt: 2, mb: 3 }} variant="contained">
+              Register
+            </Button>
           </form>
           <Button variant="text">
             <Link to="/login">Login</Link>
           </Button>
-
         </>
       )}
     </div>
