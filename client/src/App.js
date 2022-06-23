@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import AuthMenu from './components/AuthMenu';
+import Header from './components/Header';
 import Navigation from './components/Navigation';
 import { AuthContext } from './context/authContext';
 
@@ -20,10 +21,7 @@ function App() {
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       <div className="app">
-        <header className="header container">         
-          <Navigation />
-          <AuthMenu />
-        </header>
+        <Header />
         <Outlet />
       </div>
     </AuthContext.Provider>
