@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { getUserId } from '../utils/auth';
+import CustomError from '../errors/CustomError';
 
 class User {
   constructor(db) {
@@ -12,6 +13,9 @@ class User {
   }
 
   async signup(input) {
+    const userExist = await this.db.users.findUnique({where: {email: input.email}});
+    if (userExist) throw new CustomError('User with the email is already exists');
+
     const salt = await bcrypt.genSalt(3);
     const hashedPassword = await bcrypt.hash(input.password, salt);
 
@@ -27,10 +31,11 @@ class User {
     const {email, password} = input;
       
     const user = await this.db.users.findUnique({where: {email}});
-    if (!user) throw new Error('Unable to Auth');
+    if (!user) throw new CustomError('User with email not found');
     
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) throw new Error('Unable to Auth');
+    if (!isMatch) throw new CustomError.authError();
+
     
     const token = this._getToken(user.id);
     

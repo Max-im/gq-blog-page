@@ -5,9 +5,16 @@ import { GET_USER } from '../query/users';
 import { Link, useParams } from 'react-router-dom';
 import Modal from '../components/UI/Modal/Modal';
 import UsersUpdate from '../components/UsersUpdate';
+import { Button, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 export default function UsersItem() {
-  const [currentUser, setUser] = useState(null);
+  const [author, setAuthor] = useState(null);
   const [visible, setVisible] = useState(false);
   const { user } = useContext(AuthContext);
   const { id } = useParams();
@@ -16,7 +23,7 @@ export default function UsersItem() {
 
   useEffect(() => {
     if (!loading) {
-      setUser(data.user);
+      setAuthor(data.user);
     }
   }, [data]);
 
@@ -24,43 +31,67 @@ export default function UsersItem() {
     setVisible(true);
   };
 
-  console.log(currentUser)
-
   return (
     <div>
-      <h1>User Data:</h1>
+      <Typography variant="h2" component="h2">
+        Author Info
+      </Typography>
       {loading && 'Loading...'}
-      {currentUser && (
+      {author && (
         <>
-          <h3>{currentUser.name}</h3>
-          {currentUser.id === user.user.id && (
+          {user && user.user.id === author.id && (
             <>
-              <button onClick={onUpdateUser}>Update User</button>
+              <Button onClick={onUpdateUser} variant="contained">
+                Update Your Info
+              </Button>
               <Modal visible={visible} setVisible={setVisible}>
-                <UsersUpdate
-                  setVisible={setVisible}
-                  age={currentUser.age}
-                  name={currentUser.name}
-                />
+                <UsersUpdate setVisible={setVisible} age={author.age} name={author.name} />
               </Modal>
             </>
           )}
-          <p>{currentUser.email}</p>
-          <p> age: {currentUser.age}</p>
-          <h3>Posts:</h3>
-          <ul>
-            {currentUser.posts.map(({ id, title }) => (
-              <li key={id}>
-                <Link to={`/posts/${id}`}>{title}</Link>
-              </li>
+
+          <TableContainer sx={{ mt: 2 }}>
+            <TableBody>
+              <TableRow>
+                <TableCell scope="row">name</TableCell>
+                <TableCell align="right">{author.name}</TableCell>
+              </TableRow>
+              {author.email && (
+                <TableRow>
+                  <TableCell scope="row">email</TableCell>
+                  <TableCell align="right">{author.email}</TableCell>
+                </TableRow>
+              )}
+              <TableRow>
+                <TableCell scope="row">age</TableCell>
+                <TableCell align="right">{author.age}</TableCell>
+              </TableRow>
+            </TableBody>
+          </TableContainer>
+
+          <Typography variant="h4" component="h4" sx={{ mt: 2 }}>
+            Author posts
+          </Typography>
+          <List>
+            {author.posts.map(({ id, title }) => (
+              <ListItem key={id}>
+                <Link to={`/posts/${id}`}>
+                  <ListItemText primary={title} />
+                </Link>
+              </ListItem>
             ))}
-          </ul>
-          <h3>Comments:</h3>
-          <ul>
-            {currentUser.comments.map(({ id, text }) => (
-              <li key={id}>{text}</li>
+          </List>
+
+          <Typography variant="h4" component="h4" sx={{ mt: 2 }}>
+            Author Comments
+          </Typography>
+          <List>
+            {author.comments.map(({ text }, i) => (
+              <ListItem key={i}>
+                  <ListItemText primary={text} />
+              </ListItem>
             ))}
-          </ul>
+          </List>
         </>
       )}
     </div>

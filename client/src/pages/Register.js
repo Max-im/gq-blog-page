@@ -3,18 +3,19 @@ import { useMutation } from '@apollo/client';
 import { REGISTER } from '../mutations/users';
 import { AuthContext } from '../context/authContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { Alert, Button, Skeleton, TextField, Typography } from '@mui/material';
 
 export default function Register() {
   const userData = { name: '', email: '', password: '', age: 0 };
   const [user, serUserData] = useState({ ...userData });
-  const [createUser, { data, loading, error }] = useMutation(REGISTER);
-  const {setUser} = useContext(AuthContext);
+  const [createUser, { data, loading, error }] = useMutation(REGISTER, { errorPolicy: 'all' });
+  const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const register = (e) => {
     e.preventDefault();
     createUser({
-      variables: { input: {...user, age: Number(user.age)} },
+      variables: { input: { ...user, age: Number(user.age) } },
     });
   };
 
@@ -23,45 +24,86 @@ export default function Register() {
   };
 
   useEffect(() => {
-      if (!loading && data) {
-          const currentUser = {token: data.createUser.token, user: data.createUser.user};
-          setUser(currentUser);
-          localStorage.setItem('user', JSON.stringify(currentUser));
-          serUserData({...userData});
-          navigate('/');
-      }
+    if (!loading && data) {
+      const currentUser = { token: data.createUser.token, user: data.createUser.user };
+      setUser(currentUser);
+      localStorage.setItem('user', JSON.stringify(currentUser));
+      serUserData({ ...userData });
+      navigate('/');
+    }
   }, [data]);
-    
+
   return (
     <div>
-        {loading && 'Loading...'}
-      <h1>Regisger</h1>
-      <form onSubmit={register}>
-        <div>
-          <label>Name</label>
-          <input type="text" name="name" value={user.name} onChange={inputChange} />
-        </div>
-        <div>
-          <label>Email</label>
-          <input type="email" name="email" value={user.email} onChange={inputChange} />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={user.password}
-            onChange={inputChange}
-          />
-        </div>
-        <div>
-          <label>Age</label>
-          <input type="text" name="age" value={user.age} onChange={inputChange} />
-        </div>
-
-        <button type="submit">Register</button>
-      </form>
-      <Link to="/login">Login</Link>
+      {loading && <Skeleton variant="rectangular" width={210} height={118} />}
+      {!loading && (
+        <>
+          <Typography variant="h2" component="h2">
+            Regisger
+          </Typography>
+          <form onSubmit={register}>
+            <div>
+              <TextField
+                sx={{ mb: 2 }}
+                id="name"
+                value={user.name}
+                onChange={inputChange}
+                label="Name"
+                size="small"
+                variant="outlined"
+                name="name"
+              />
+            </div>
+            <div>
+              <TextField
+                sx={{ mb: 2 }}
+                id="email"
+                value={user.email}
+                onChange={inputChange}
+                label="Email"
+                size="small"
+                variant="outlined"
+                name="email"
+              />
+            </div>
+            <div>
+              <TextField
+                sx={{ mb: 2 }}
+                id="password"
+                value={user.password}
+                onChange={inputChange}
+                label="Password"
+                size="small"
+                type="password"
+                variant="outlined"
+                name="password"
+              />
+            </div>
+            <div>
+              <TextField
+                sx={{ mb: 2 }}
+                id="age"
+                value={user.age}
+                onChange={inputChange}
+                label="Age"
+                size="small"
+                type="number"
+                variant="outlined"
+                name="age"
+              />
+            </div>
+            <Button type="submit" sx={{ mt: 2, mb: 3 }} variant="contained">
+              Register
+            </Button>
+            {error && error.graphQLErrors.map(({ message }, i) => 
+              <Alert severity="error" key={i}>{message}</Alert>
+            )}
+          </form>
+          <Button variant="text">
+            <Link to="/login">Login</Link>
+          </Button>
+        </>
+      )}
     </div>
   );
 }

@@ -22,7 +22,7 @@ model posts {
   title     String
   body      String
   published Boolean    @default(false)
-  author    users      @relation(fields: [authorId], references: [id])
+  author    users      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
   comments  comments[]
 }
@@ -30,8 +30,8 @@ model posts {
 model comments {
   id       Int    @id @default(autoincrement())
   text     String
-  author   users  @relation(fields: [authorId], references: [id])
+  author   users  @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId Int
-  post     posts  @relation(fields: [postId], references: [id])
+  post     posts  @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId   Int
 }

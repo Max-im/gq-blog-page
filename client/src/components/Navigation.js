@@ -1,17 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom'; // version 5.2.0
 
 export default function Navigation() {
+  const navigate = useNavigate();
   return (
-    <nav>
-      <ul style={{display: 'flex'}}>
-        <li style={{margin: '0 10px'}}>
-          <Link to="/">Posts</Link>
-        </li>
-        <li style={{margin: '0 10px'}}>
-          <Link to="/users">Users</Link>
-        </li>
-      </ul>
-    </nav>
+    <Box component="div" sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+      <Button onClick={() => navigate('/')} sx={{ my: 2, color: 'white', display: 'block' }}>
+        Posts
+      </Button>
+      <Button onClick={() => navigate('/users')} sx={{ my: 2, color: 'white', display: 'block' }}>
+        Users
+      </Button>
+    </Box>
   );
 }
